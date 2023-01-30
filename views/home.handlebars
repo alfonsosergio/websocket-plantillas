@@ -1,0 +1,13 @@
+{{#if products.length}}
+{{#each products}}
+    <div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h2 class="card-title">Modelo de auto {{title}}</h2>
+        <h5 class="card-title">Description de auto {{description}}</h5>
+        <a href="#" class="btn btn-primary">{{category}}</a>
+    </div>
+    </div>
+{{/each}}
+{{else}}
+<h2>NO HAY PRODUCTOS</h2>
+{{/if}}

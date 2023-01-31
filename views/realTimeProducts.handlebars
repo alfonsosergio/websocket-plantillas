@@ -1,1 +1,28 @@
- 
+<h3>SOCKET PRODUCTS</h3>
+<form id="formulario">
+   Title: <input type="text" name="title" id="title">
+   Description: <input type="text" name="description" id="description">
+   Code: <input type="text" name="code" id="code">
+   Price: <input type="number" name="price" id="price">
+   Status: <input type="text" name="status" id="status">
+   Stock: <input type="number" name="stock" id="stock">
+   Category: <input type="number" name="category" id="category">
+   Thumbnails: <input type="text" name="thumbnails" id="thumbnails">
+   <input type="submit" value="ENVIAR">
+</form>
+{{#if products.length}}
+{{#each products}}
+    <div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h2 class="card-title">Modelo de auto {{title}}</h2>
+        <h5 class="card-title">Description de auto {{description}}</h5>
+        <a href="#" class="btn btn-primary">{{category}}</a>
+    </div>
+    </div>
+{{/each}}
+{{else}}
+<h2>NO HAY PRODUCTOS</h2>
+{{/if}}
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/index.js"></script>

@@ -16,6 +16,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// archivos estaticos en public
+app.use(express.static(__dirname + '/public'))
+
 //configuracion handlebars
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
@@ -27,74 +30,6 @@ app.use("/", viewsRouter);
 
 // Rutas
 
-// ruta
-app.get("/", (req, res) => {
-  res.render("socket");
-});
-
-// Ruta GET de productros
-app.get("/api/productos", async (req, res) => {
-  const { limit } = req.query;
-  const products = await productsManager.getProducts(limit);
-  res.json(products);
-});
-
-app.get("/api/productos/:pid", async (req, res) => {
-  const { pid } = req.params;
-  const product = await productsManager.getProductById(pid);
-  product
-    ? res.send(product)
-    : res.send({ error: "Producto no existe en el inventario" });
-});
-
-// Ruta POST de productros
-app.post("/api/producto", async (req, res) => {
-  const obj = req.body;
-  const productCreate = await productsManager.addProduct(obj);
-  res.json({ message: "Producto creado", productCreate });
-});
-
-// Ruta PUT de producto
-app.put("/api/producto/:pid", async (req, res) => {
-  const { pid } = req.params;
-  const obj = req.body;
-  const product = await productsManager.updateProduct(parseInt(pid), obj);
-  product
-    ? res.json({ message: "Usuario actualizado con exito" })
-    : res.send({ error: "Producto no existe en el inventario" });
-});
-
-// Ruta DELETE de producto
-app.delete("/api/producto/:pid", async (req, res) => {
-  const { pid } = req.params;
-  const product = await productsManager.deleteProduct(parseInt(pid));
-  product
-    ? res.json({ message: "Usuario eliminado con exito" })
-    : res.send({ error: "Producto no existe en el inventario" });
-});
-
-// Ruta de carrito
-
-// Ruta GET de carts
-app.get("/api/carts/:cid", async (req, res) => {
-  const { cid } = req.params;
-  const cart = await cartsManager.getCartById(cid);
-  cart ? res.send(cart) : res.send({ error: "Carrito no existe" });
-});
-
-// Ruta POST de carts
-app.post("/api/carts", async (req, res) => {
-  const obj = req.body;
-  const cartsCreate = await cartsManager.addCarts(obj);
-  res.json({ message: "Carrito creado", cartsCreate });
-});
-
-app.post("/api/carts/:cid/product/:pid", async (req, res) => {
-  const { cid, pid } = req.params;
-  const obj = req.body;
-  const cartsCreate = await cartsManager.addCartsProduct(cid, pid, obj);
-  res.json({ message: "Porducto agregado a carrito", cartsCreate });
-});
 /*
 //Llamado del puerto
 app.listen(PORT, () => {
@@ -111,12 +46,23 @@ const httpServer = app.listen(8080, () => {
 const socketServer = new Server(httpServer);
 
 socketServer.on('connection', (socket) => {
+
     console.log('usuario conectado ', socket.id)
     socket.on('disconnect', () => {
       console.log('usuario desconectado')
     })
 
-    socket.on('mensaje1',(obj)=>{
-        console.log(obj)
-      })
+    socket.on('mensaje1',async (obj)=>{
+        await productsManager.addProduct(obj);
+        const products = await productsManager.getProducts();
+        socketServer.emit('respuesta1', products)
+    })
+
+    socket.on('prodDelete',async (productIdDelete)=>{
+      //console.log(productIdDelete);
+      await productsManager.deleteProduct(parseInt(productIdDelete));
+      const products = await productsManager.getProducts();
+      socketServer.emit('respuesta1', products)
+  })
+    
 })

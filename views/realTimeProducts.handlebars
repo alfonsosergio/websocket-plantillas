@@ -1,4 +1,5 @@
-<h3>SOCKET PRODUCTS</h3>
+<h2>SOCKET PRODUCTS</h2>
+<h3>Formulario agregar producto</h3>
 <form id="formulario">
    Title: <input type="text" name="title" id="title">
    Description: <input type="text" name="description" id="description">
@@ -8,21 +9,33 @@
    Stock: <input type="number" name="stock" id="stock">
    Category: <input type="number" name="category" id="category">
    Thumbnails: <input type="text" name="thumbnails" id="thumbnails">
-   <input type="submit" value="ENVIAR">
+   <input type="submit" value="AGREGAR">
 </form>
-{{#if products.length}}
-{{#each products}}
-    <div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h2 class="card-title">Modelo de auto {{title}}</h2>
-        <h5 class="card-title">Description de auto {{description}}</h5>
-        <a href="#" class="btn btn-primary">{{category}}</a>
-    </div>
-    </div>
-{{/each}}
-{{else}}
-<h2>NO HAY PRODUCTOS</h2>
-{{/if}}
+
+
+<h3>Formulario eliminar producto</h3>
+<form id="formDelete">
+   PRODUCT ID: <input type="text" name="ID" id="idProduct">
+   <input type="submit" value="ELIMINAR">
+</form>
+
+
+<div id="parrafo">
+    {{#if products.length}}
+    {{#each products}}
+        <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h2 class="card-title">Modelo de auto {{title}}</h2>
+            <h5 class="card-title">Description de auto {{description}}</h5>
+            <a href="#" class="btn btn-primary">{{category}}</a>
+        </div>
+        </div>
+    {{/each}}
+    {{else}}
+    <h2>NO HAY PRODUCTOS</h2>
+    {{/if}}
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/index.js"></script>

@@ -1,5 +1,7 @@
 const socket = io()
 const formulario = document.getElementById('formulario')
+const formDelete = document.getElementById('formDelete')
+const idProduct = document.getElementById('idProduct')
 const inputDescription = document.getElementById('description')
 const inputPrice = document.getElementById('price')
 const inputStatus = document.getElementById('status')
@@ -20,5 +22,32 @@ formulario.onsubmit = (e) => {
     const category = inputCategory.value
     const thumbnails = inputThumbnails.value
     const title = inputTitle.value
-    socket.emit('mensaje1', { description, price, code, stock, category, thumbnails, title })
+    const status = true
+    socket.emit('mensaje1', { title, description, price, status, code, stock, category, thumbnails })
 }
+
+
+
+
+formDelete.onsubmit = (e) => {
+    e.preventDefault()
+    const productIdDelete = idProduct.value
+    socket.emit('prodDelete', productIdDelete)
+}
+
+socket.on('respuesta1', (products) => {
+    console.log(products);
+    let info = ''
+    products.forEach((m) => {
+      info += `<div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h2 class="card-title">Modelo de auto ${m.title}</h2>
+                        <h5 class="card-title">Description de auto ${m.description}</h5>
+                        <a href="#" class="btn btn-primary">${m.category}</a>
+                    </div>
+                </div>
+                `
+    })
+    
+    parrafo.innerHTML = info
+  })
